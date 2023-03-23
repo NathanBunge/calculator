@@ -12,16 +12,12 @@ namespace Calculator
 {
     public partial class Form1 : Form
     {
-        private double result;
-        private double currentNumber;
-        private char currentOperation;
+        private CalculatorLogic calculator;
 
         public Form1()
         {
             InitializeComponent();
-            result = 0;
-            currentNumber = 0;
-            currentOperation = ' ';
+            calculator = new CalculatorLogic();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -30,7 +26,7 @@ namespace Calculator
 
         private void numberButton_Click(object sender, EventArgs e)
         {
-            if (resultLabel.Text == "0" || currentOperation != ' ')
+            if (calculator.Result == 0 || calculator.CurrentOperation != ' ')
             {
                 resultLabel.Text = "";
             }
@@ -49,26 +45,26 @@ namespace Calculator
             double number;
             if (Double.TryParse(resultLabel.Text, out number))
             {
-                currentNumber = number;
+                calculator.CurrentNumber = number;
             }
         }
 
         private void operationButton_Click(object sender, EventArgs e)
         {
-            
+
             Button button = (Button)sender;
-            currentOperation = button.Text[0];
-            if (currentOperation != ' ')
+            calculator.CurrentOperation = button.Text[0];
+            if (calculator.CurrentOperation != ' ')
             {
                 try
                 {
-                    Calculate();
-                    resultLabel.Text = result.ToString();
+                    calculator.Calculate();
+                    resultLabel.Text = calculator.Result.ToString();
                 }
                 catch (DivideByZeroException ex)
                 {
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Clear();
+                    calculator.Clear();
                     resultLabel.Text = "0";
                     return;
                 }
@@ -79,55 +75,22 @@ namespace Calculator
         {
             try
             {
-                Calculate();
-                resultLabel.Text = result.ToString();
-                currentOperation = ' ';
+                calculator.Calculate();
+                resultLabel.Text = calculator.Result.ToString();
+                calculator.CurrentOperation = ' ';
             }
             catch (DivideByZeroException ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.Clear();
+                calculator.Clear();
                 resultLabel.Text = "0";
             }
         }
 
         private void clearBtn_Click(object sender, EventArgs e)
         {
-            Clear();
+            calculator.Clear();
             resultLabel.Text = "0";
-        }
-
-        private void Calculate()
-        {
-            switch (currentOperation)
-            {
-                case '+':
-                    result += currentNumber;
-                    break;
-                case '-':
-                    result -= currentNumber;
-                    break;
-                case '*':
-                    result *= currentNumber;
-                    break;
-                case '/':
-                    if (currentNumber != 0)
-                    {
-                        result /= currentNumber;
-                    }
-                    else
-                    {
-                        throw new DivideByZeroException("Cannot divide by zero");
-                    }
-                    break;
-            }
-            currentNumber = 0;
-        }
-        public void Clear()
-        {
-            result = 0;
-            currentNumber = 0;
-            currentOperation = ' ';
         }
 
         private void resultLabel_Click(object sender, EventArgs e)
@@ -135,4 +98,3 @@ namespace Calculator
         }
     }
 }
-

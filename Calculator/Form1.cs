@@ -12,26 +12,25 @@ namespace Calculator
 {
     public partial class Form1 : Form
     {
-
-        private CalculatorLogic calculator;
-
+        private double result;
+        private double currentNumber;
+        private char currentOperation;
 
         public Form1()
         {
             InitializeComponent();
-            calculator = new CalculatorLogic();
-
+            result = 0;
+            currentNumber = 0;
+            currentOperation = ' ';
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
-
         }
 
         private void numberButton_Click(object sender, EventArgs e)
         {
-            if (resultLabel.Text == "0" || calculator.CurrentOperation != ' ')
+            if (resultLabel.Text == "0" || currentOperation != ' ')
             {
                 resultLabel.Text = "";
             }
@@ -50,63 +49,90 @@ namespace Calculator
             double number;
             if (Double.TryParse(resultLabel.Text, out number))
             {
-                calculator.SetCurrentNumber(number);
+                currentNumber = number;
             }
         }
 
         private void operationButton_Click(object sender, EventArgs e)
         {
+            
             Button button = (Button)sender;
-            if (calculator.CurrentOperation != ' ')
+            currentOperation = button.Text[0];
+            if (currentOperation != ' ')
             {
                 try
                 {
-                    double result = calculator.Calculate();
+                    Calculate();
                     resultLabel.Text = result.ToString();
-                    calculator.SetCurrentNumber(result);
                 }
                 catch (DivideByZeroException ex)
                 {
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    calculator.Clear();
+                    Clear();
                     resultLabel.Text = "0";
                     return;
                 }
             }
-            calculator.SetCurrentOperation(button.Text[0]);
-            resultLabel.Text = "0";
-        }
-
-
-
-
-        private void resultLabel_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void equals_Click(object sender, EventArgs e)
         {
             try
             {
-                double result = calculator.Calculate();
+                Calculate();
                 resultLabel.Text = result.ToString();
-                calculator.SetCurrentNumber(result);
-                calculator.SetCurrentOperation(' ');
+                currentOperation = ' ';
             }
             catch (DivideByZeroException ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                calculator.Clear();
+                this.Clear();
                 resultLabel.Text = "0";
             }
         }
 
         private void clearBtn_Click(object sender, EventArgs e)
         {
-            calculator.Clear();
+            Clear();
             resultLabel.Text = "0";
         }
-    }
 
+        private void Calculate()
+        {
+            switch (currentOperation)
+            {
+                case '+':
+                    result += currentNumber;
+                    break;
+                case '-':
+                    result -= currentNumber;
+                    break;
+                case '*':
+                    result *= currentNumber;
+                    break;
+                case '/':
+                    if (currentNumber != 0)
+                    {
+                        result /= currentNumber;
+                    }
+                    else
+                    {
+                        throw new DivideByZeroException("Cannot divide by zero");
+                    }
+                    break;
+            }
+            currentNumber = 0;
+        }
+        public void Clear()
+        {
+            result = 0;
+            currentNumber = 0;
+            currentOperation = ' ';
+        }
+
+        private void resultLabel_Click(object sender, EventArgs e)
+        {
+        }
+    }
 }
+

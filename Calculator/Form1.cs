@@ -56,35 +56,16 @@ namespace Calculator
             calculator.CurrentOperation = button.Text[0];
             if (calculator.CurrentOperation != ' ')
             {
-                try
-                {
-                    calculator.Calculate();
-                    resultLabel.Text = calculator.Result.ToString();
-                }
-                catch (DivideByZeroException ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    calculator.Clear();
-                    resultLabel.Text = "0";
-                    return;
-                }
+                calculator.Calculate();
+                resultLabel.Text = calculator.Result.ToString();
             }
         }
 
         private void equals_Click(object sender, EventArgs e)
         {
-            try
-            {
-                calculator.Calculate();
-                resultLabel.Text = calculator.Result.ToString();
-                calculator.CurrentOperation = ' ';
-            }
-            catch (DivideByZeroException ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                calculator.Clear();
-                resultLabel.Text = "0";
-            }
+            calculator.Calculate();
+            resultLabel.Text = calculator.Result.ToString();
+            calculator.CurrentOperation = ' ';
         }
 
         private void clearBtn_Click(object sender, EventArgs e)

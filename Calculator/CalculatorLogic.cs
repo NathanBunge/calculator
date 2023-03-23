@@ -55,14 +55,7 @@ namespace Calculator
                     result *= currentNumber;
                     break;
                 case '/':
-                    if (currentNumber != 0)
-                    {
-                        result /= currentNumber;
-                    }
-                    else
-                    {
-                        throw new DivideByZeroException("Cannot divide by zero");
-                    }
+                    result /= currentNumber;
                     break;
             }
             currentNumber = 0;

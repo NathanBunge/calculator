@@ -12,9 +12,9 @@ namespace Calculator
 {
     public class CalculatorLogic
     {
-        private double result;
-        private double currentNumber;
-        private char currentOperation;
+        public double result;
+        public double currentNumber;
+        public char currentOperation;
 
         public CalculatorLogic()
         {
@@ -23,26 +23,9 @@ namespace Calculator
             currentOperation = ' ';
         }
 
-        public double Result
-        {
-            get { return result; }
-            set { result = value; }
-        }
-
-        public double CurrentNumber
-        {
-            get { return currentNumber; }
-            set { currentNumber = value; }
-        }
-
-        public char CurrentOperation
-        {
-            get { return currentOperation; }
-            set { currentOperation = value; }
-        }
-
         public void Calculate()
         {
+            Console.WriteLine("revious result: " + result.ToString());
             switch (currentOperation)
             {
                 case '+':
@@ -59,13 +42,8 @@ namespace Calculator
                     break;
             }
             currentNumber = 0;
+            Console.WriteLine("current result: " + result.ToString());
         }
 
-        public void Clear()
-        {
-            result = 0;
-            currentNumber = 0;
-            currentOperation = ' ';
-        }
     }
 }

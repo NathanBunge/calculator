@@ -26,7 +26,7 @@ namespace Calculator
 
         private void numberButton_Click(object sender, EventArgs e)
         {
-            if (calculator.Result == 0 || calculator.CurrentOperation != ' ')
+            if (calculator.result == 0 || calculator.currentOperation != ' ')
             {
                 resultLabel.Text = "";
             }
@@ -45,7 +45,7 @@ namespace Calculator
             double number;
             if (Double.TryParse(resultLabel.Text, out number))
             {
-                calculator.CurrentNumber = number;
+                calculator.currentNumber = number;
             }
         }
 
@@ -53,24 +53,28 @@ namespace Calculator
         {
 
             Button button = (Button)sender;
-            calculator.CurrentOperation = button.Text[0];
-            if (calculator.CurrentOperation != ' ')
+            calculator.currentOperation = button.Text[0];
+            if (calculator.currentOperation != ' ')
             {
                 calculator.Calculate();
-                resultLabel.Text = calculator.Result.ToString();
+                resultLabel.Text = calculator.result.ToString();
             }
         }
 
         private void equals_Click(object sender, EventArgs e)
         {
             calculator.Calculate();
-            resultLabel.Text = calculator.Result.ToString();
-            calculator.CurrentOperation = ' ';
+            resultLabel.Text = calculator.result.ToString();
+            calculator.currentOperation = ' ';
         }
 
         private void clearBtn_Click(object sender, EventArgs e)
         {
-            calculator.Clear();
+
+            calculator.result = 0;
+            calculator.currentNumber = 0;
+            calculator.currentOperation = ' ';
+            
             resultLabel.Text = "0";
         }
 

@@ -12,37 +12,37 @@ namespace Calculator
 {
     public class CalculatorLogic
     {
-        public double result;
-        public double currentNumber;
+        public double num;
+        public double current;
         public char currentOperation;
 
         public CalculatorLogic()
         {
-            result = 0;
-            currentNumber = 0;
+            num = 0;
+            current = 0;
             currentOperation = ' ';
         }
 
-        public void Calculate()
+        public void Logic()
         {
-            Console.WriteLine("revious result: " + result.ToString());
+            Console.WriteLine("revious result: " + num.ToString());
             switch (currentOperation)
             {
                 case '+':
-                    result += currentNumber;
+                    num += current;
                     break;
                 case '-':
-                    result -= currentNumber;
+                    num -= current;
                     break;
                 case '*':
-                    result *= currentNumber;
+                    num *= current;
                     break;
                 case '/':
-                    result /= currentNumber;
+                    num /= current;
                     break;
             }
-            currentNumber = 0;
-            Console.WriteLine("current result: " + result.ToString());
+            current = 0;
+            Console.WriteLine("current result: " + num.ToString());
         }
 
     }

@@ -12,12 +12,16 @@ namespace Calculator
 {
     public partial class Form1 : Form
     {
-        private CalculatorLogic calculator;
+        private double result;
+        private double currentNumber;
+        private char currentOperation;
 
         public Form1()
         {
             InitializeComponent();
-            calculator = new CalculatorLogic();
+            result = 0;
+            currentNumber = 0;
+            currentOperation = ' ';
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -26,7 +30,7 @@ namespace Calculator
 
         private void numberButton_Click(object sender, EventArgs e)
         {
-            if (calculator.num == 0 || calculator.currentOperation != ' ')
+            if (resultLabel.Text == "0" || currentOperation != ' ')
             {
                 resultLabel.Text = "";
             }
@@ -45,37 +49,85 @@ namespace Calculator
             double number;
             if (Double.TryParse(resultLabel.Text, out number))
             {
-                calculator.current = number;
+                currentNumber = number;
             }
         }
 
         private void operationButton_Click(object sender, EventArgs e)
         {
-
+            
             Button button = (Button)sender;
-            calculator.currentOperation = button.Text[0];
-            if (calculator.currentOperation != ' ')
+            currentOperation = button.Text[0];
+            if (currentOperation != ' ')
             {
-                calculator.Logic();
-                resultLabel.Text = calculator.num.ToString();
+                try
+                {
+                    Calculate();
+                    resultLabel.Text = result.ToString();
+                }
+                catch (DivideByZeroException ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Clear();
+                    resultLabel.Text = "0";
+                    return;
+                }
             }
         }
 
         private void equals_Click(object sender, EventArgs e)
         {
-            calculator.Logic();
-            resultLabel.Text = calculator.num.ToString();
-            calculator.currentOperation = ' ';
+            try
+            {
+                Calculate();
+                resultLabel.Text = result.ToString();
+                currentOperation = ' ';
+            }
+            catch (DivideByZeroException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Clear();
+                resultLabel.Text = "0";
+            }
         }
 
         private void clearBtn_Click(object sender, EventArgs e)
         {
-
-            calculator.num = 0;
-            calculator.current = 0;
-            calculator.currentOperation = ' ';
-            
+            Clear();
             resultLabel.Text = "0";
+        }
+
+        private void Calculate()
+        {
+            switch (currentOperation)
+            {
+                case '+':
+                    result += currentNumber;
+                    break;
+                case '-':
+                    result -= currentNumber;
+                    break;
+                case '*':
+                    result *= currentNumber;
+                    break;
+                case '/':
+                    if (currentNumber != 0)
+                    {
+                        result /= currentNumber;
+                    }
+                    else
+                    {
+                        throw new DivideByZeroException("Cannot divide by zero");
+                    }
+                    break;
+            }
+            currentNumber = 0;
+        }
+        public void Clear()
+        {
+            result = 0;
+            currentNumber = 0;
+            currentOperation = ' ';
         }
 
         private void resultLabel_Click(object sender, EventArgs e)
@@ -83,3 +135,4 @@ namespace Calculator
         }
     }
 }
+
